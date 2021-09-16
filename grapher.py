@@ -3,7 +3,7 @@ from sympy import *
 x = symbols('x')
 expr = sympify(input("expression: \ny = ").replace("^", "**"))
 rangeX = (input("range of x values to render: ex. \"a, b\"\n")).split(",")
-if rangeX[0]>rangeX[1]:
+if rangeX[0] > rangeX[1]:
     temp = rangeX[0]
     rangeX[0] = rangeX[1]
     rangeX[1] = temp
