@@ -15,7 +15,7 @@ expression = sympify(originalEq)
 varToSolveFor = sympify(varLetter)
 
 answer = sympify(solve(expression, varToSolveFor))
-answerFormatted = (str(answer)).replace("[", "").replace("]", "")
+answerFormatted = (str(answer)).replace("[", "").replace("]", "").replace("**","^")
 print(f"Solution:\n{varToSolveFor} = {answerFormatted}")
 
 # NOT WORKING, Try subbing before the solution and resolving
