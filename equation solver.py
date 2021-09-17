@@ -17,19 +17,26 @@ while True:
     varToSolveFor = sympify(varLetter)
 
     answer = sympify(solve(expression, varToSolveFor))
-    answerFormatted = (str(answer)).replace("[", "").replace("]", "").replace("**","^")
+    answerFormatted = (str(answer)).replace("[", "").replace("]", "").replace("**", "^")
     print(f"Solution:\n{varToSolveFor} = {answerFormatted}")
 
     # NOT WORKING, Try subbing before the solution and resolving
 
-    subLetter = sympify(input("What variable should be substituted? (none to skip)\n"))
-    while(subLetter != ""):
-
+    subLetter = sympify(input("What variable should be substituted? (\"none\" to skip)\n"))
+    while subLetter != sympify("none"):
+        replacement = input("What should it be replaced with?\n")
         for i in range(len(answer)):
             x = answer[i]
-            x = x.subs(subLetter, input("What should it be replaced with?\n"))
+            x = x.subs(subLetter, replacement)
             answer[i] = x
 
-        answerFormatted = (str(answer)).replace("[", "").replace("]", "")
+        answerFormatted = (str(answer)).replace("[", "").replace("]", "").replace("**", "^")
         print(f"Solution:\n{varToSolveFor} = {answerFormatted}")
         subLetter = sympify(input("Next variable to be substituted?\n"))
+    if input("evaluate? (y/n)") == "y":
+        for i in range(len(answer)):
+            x = answer[i]
+            x = x.evalf(10)
+            answer[i] = x
+        answerFormatted = (str(answer)).replace("[", "").replace("]", "").replace("**", "^")
+        print(f"Solution:\n{varToSolveFor} = {answerFormatted}")
