@@ -4,8 +4,8 @@ from sympy.solvers import solve
 init_printing(use_unicode=True)
 
 
-a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = symbols\
-    ("a b c d e f g h i j k l m n o p q r s t u v w x y z")
+a, b, c, d, f, g, h, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = symbols\
+    ("a b c d f g h j k l m n o p q r s t u v w x y z")
 while True:
     originalEq = input\
         ("enter equation with variables represented by lowercase variables. You MUST add \"*\", you cannot do \"2x\"\n")
@@ -38,3 +38,5 @@ while True:
             answer[i] = x
         answerFormatted = (str(answer)).replace("[", "").replace("]", "").replace("**", "^")
         print(f"Solution:\n{varToSolveFor} = {answerFormatted}")
+
+
