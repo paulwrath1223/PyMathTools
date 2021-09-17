@@ -1,7 +1,11 @@
+
+# TODO display holes as points, not x values (even though they have no y value) so that they can be added to the graph
+# TODO plot holes ^ with plot_implicit circles at the point found above
+
 from sympy import *
 from sympy.plotting import plot
 from sympy.solvers import solve
-import matplotlib
+
 
 init_printing(use_unicode=True)
 
