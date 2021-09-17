@@ -1,6 +1,8 @@
 from sympy import *
-
+from sympy.plotting import plot
 from sympy.solvers import solve
+import matplotlib
+
 init_printing(use_unicode=True)
 
 # test eq: (x^2-1)/(x^2-2*x-3)
@@ -8,7 +10,7 @@ init_printing(use_unicode=True)
 holes = []
 vAsymptotes = []
 
-x = symbols("x")
+x, y = symbols("x y")
 while True:
     originalEq = input("enter equation with x.\ny = ").replace("^", "**")
 
@@ -31,3 +33,17 @@ while True:
     firstTermDen = sympify(str(fullDen).split()[0])
     sAsymptote = firstTermNum/firstTermDen
     print(f"Slant asymptote: y = {sAsymptote}")
+    if input("see graph? (y/n)") == "y":
+        rangeX = (input("range of x values to render: ex. \"a, b\"\n")).split(",")
+        if rangeX[0] > rangeX[1]:
+            temp = rangeX[0]
+            rangeX[0] = rangeX[1]
+            rangeX[1] = temp
+        elif rangeX[0] == rangeX[1]:
+            raise Exception("The range must be greater than 0")
+        else:
+            p1 = plot(sympify(originalEq), (x, rangeX[0], rangeX[1]), show=False)
+            for expr in vAsymptotes:
+                p1.append(plot_implicit((Eq(x, expr)), (x, rangeX[0], rangeX[1]), show=False, line_color="r")[0])
+            p1.append(plot(sympify(sAsymptote), (x, rangeX[0], rangeX[1]), show=False, line_color="g")[0])
+            p1.show()
