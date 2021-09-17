@@ -20,8 +20,6 @@ while True:
     answerFormatted = (str(answer)).replace("[", "").replace("]", "").replace("**", "^")
     print(f"Solution:\n{varToSolveFor} = {answerFormatted}")
 
-    # NOT WORKING, Try subbing before the solution and resolving
-
     subLetter = sympify(input("What variable should be substituted? (\"none\" to skip)\n"))
     while subLetter != sympify("none"):
         replacement = input("What should it be replaced with?\n")
