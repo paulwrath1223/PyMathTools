@@ -42,8 +42,18 @@ while True:
         elif rangeX[0] == rangeX[1]:
             raise Exception("The range must be greater than 0")
         else:
-            p1 = plot(sympify(originalEq), (x, rangeX[0], rangeX[1]), show=False)
-            for expr in vAsymptotes:
-                p1.append(plot_implicit((Eq(x, expr)), (x, rangeX[0], rangeX[1]), show=False, line_color="r")[0])
-            p1.append(plot(sympify(sAsymptote), (x, rangeX[0], rangeX[1]), show=False, line_color="g")[0])
-            p1.show()
+            rangeY = (input("range of y values to render: ex. \"a, b\"\n")).split(",")
+            if rangeY[0] > rangeY[1]:
+                temp = rangeY[0]
+                rangeY[0] = rangeY[1]
+                rangeY[1] = temp
+            elif rangeY[0] == rangeY[1]:
+                raise Exception("The range must be greater than 0")
+            else:
+                p1 = plot(sympify(originalEq), (x, rangeX[0], rangeX[1]), (y, rangeY[0], rangeY[1]), show=False)
+                for expr in vAsymptotes:
+                    p1.append(plot_implicit((Eq(x, expr)), (x, rangeX[0], rangeX[1]), (y, rangeY[0], rangeY[1]),
+                                            show=False, line_color="r")[0])
+                p1.append(plot(sympify(sAsymptote), (x, rangeX[0], rangeX[1]), (y, rangeY[0], rangeY[1]),
+                               show=False, line_color="g")[0])
+                p1.show()
