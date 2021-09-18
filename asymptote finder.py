@@ -15,8 +15,16 @@ x, y = symbols("x y")  # declare x and y as mathematical symbols
 
 
 def multiplify(express):
-    # TODO
-    print("method for adding '*' signs into user typed expressions")
+    express_list = list(str(express))
+    out = ""
+    for counter in range(len(express_list)):
+        char = express_list[counter]
+        out += char
+        if char.isnumeric() or char == "x":
+            next_char = express_list[counter+1]
+            if next_char == "x" or next_char == "(":
+                out += "*"
+    return sympify(out)
     # sample: "2(x-1)" -> "2*(x-1)"
 
 
@@ -55,8 +63,8 @@ while True:
         "enter equation with x.\ny = ").replace("^", "**")  # sympy uses '**' for powers, but I use '^'
 
     brokenExpr = originalEq.split("/")  # split the equation into a list containing the numerator and denominator
-    numerator = sympify(brokenExpr[0])
-    denominator = sympify(brokenExpr[1])  # 'sympify' function converts strings to mathematical expressions
+    numerator = multiplify(brokenExpr[0])
+    denominator = multiplify(brokenExpr[1])  # 'multiplify' function adds '*' where needed
     nIssues = solve(numerator, x)  # finds all values of x that make the numerator = 0
     dIssues = solve(denominator, x)  # finds all values of x that make the denominator = 0
     for numb in dIssues:  # loop through undefined y values
