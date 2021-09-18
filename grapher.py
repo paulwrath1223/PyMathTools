@@ -1,4 +1,4 @@
-# from sympy.plotting import plot
+
 from sympy import *
 x = symbols('x')
 expr = sympify(input("expression: \ny = ").replace("^", "**"))
