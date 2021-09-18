@@ -1,12 +1,12 @@
 
-# TODO implement slant asymptote cases found here: https://courses.lumenlearning.com/ivytech-collegealgebra/chapter/identify-vertical-and-horizontal-asymptotes/
+# TODO: add method for automatically adding '*' between integers and quantities
+
 
 from sympy import *
 from sympy.plotting import plot
 from sympy.solvers import solve
 
-
-# test eq: (x^2-1)/(x^2-2*x-3)
+# test eq: (x^2-1)/(x^2-2*x-3)     (3*x^2-2*x+1)/(x-1)
 
 holeRadius = 0.2  # constant representing the radius of the holes drawn on the plot
 
@@ -15,6 +15,40 @@ vAsymptotes = []
 holeXY = []
 
 x, y = symbols("x y")  # declare x and y as mathematical symbols
+
+
+def get_slant(num, den):
+    full_num = expand(num)
+    full_den = expand(den)  # expand both numerator and denominator to unfactored form
+    first_term_num = sympify(str(full_num).split()[0])  # find the first (biggest) term in each
+    first_term_den = sympify(str(full_den).split()[0])
+    # TODO Fix code duplication for num and den below, consider new function
+    broken_first_term_num = str(first_term_num).split("**")  # returns the degree of the biggest term in the numerator
+    broken_first_term_den = str(first_term_den).split("**")  # returns the degree of the biggest term in the denominator
+    if len(broken_first_term_num) == 2:  # if '**' is present, the degree is what follows
+        num_degree = int(broken_first_term_num[1])
+    elif len(broken_first_term_num) == 1:  # if the biggest term does not have an exponent, the degree is 1
+        num_degree = 1
+    else:
+        raise Exception("internal problem within get_slant for numerator")
+    # same code for denominator
+    if len(broken_first_term_den) == 2:  # if '**' is present, the degree is what follows
+        den_degree = int(broken_first_term_den[1])
+    elif len(broken_first_term_den) == 1:  # if the biggest term does not have an exponent, the degree is 1
+        den_degree = 1
+    else:
+        raise Exception("internal problem within get_slant for denominator")
+
+    if num_degree < den_degree:  # case 1 from \/
+        # https://courses.lumenlearning.com/ivytech-collegealgebra/chapter/identify-vertical-and-horizontal-asymptotes/
+        return 0
+    elif num_degree - 1 == den_degree:
+        q = div(num, den)
+        return q[0]
+    else:
+        return first_term_num / first_term_den  # find slant asymptote by dividing the highest degree terms
+
+
 while True:
     originalEq = input(
         "enter equation with x.\ny = ").replace("^", "**")  # sympy uses '**' for powers, but I use '^'
@@ -24,11 +58,11 @@ while True:
     denominator = sympify(brokenExpr[1])  # 'sympify' function converts strings to mathematical expressions
     nIssues = solve(numerator, x)  # finds all values of x that make the numerator = 0
     dIssues = solve(denominator, x)  # finds all values of x that make the denominator = 0
-    for num in dIssues:  # loop through undefined y values
-        if num in nIssues:
-            holes.append(num)  # if the x value also makes the numerator = 0, then it is a hole, not an asymptote
+    for numb in dIssues:  # loop through undefined y values
+        if numb in nIssues:
+            holes.append(numb)  # if the x value also makes the numerator = 0, then it is a hole, not an asymptote
         else:
-            vAsymptotes.append(num)  # else: its a vertical asymptote
+            vAsymptotes.append(numb)  # else: its a vertical asymptote
 
     simpleIn = simplify(originalEq)  # factor the original equation
     print(f"factored equation: {simpleIn}")
@@ -40,11 +74,7 @@ while True:
     holesFormatted = str(holeXY).replace("[", "").replace("]", "")  # make the coordinates look nice when printed
     vAsymptotesFormatted = str(vAsymptotes).replace("[", "").replace("]", "")  # format the strings for humans
     print(f"Holes: {holesFormatted}\nVertical Asymptotes: x = {vAsymptotesFormatted}")
-    fullNum = expand(numerator)
-    fullDen = expand(denominator)  # expand both numerator and denominator to unfactored form
-    firstTermNum = sympify(str(fullNum).split()[0])  # find the first (biggest) term in each
-    firstTermDen = sympify(str(fullDen).split()[0])
-    sAsymptote = firstTermNum/firstTermDen  # find slant asymptote by dividing the highest degree terms
+    sAsymptote = get_slant(numerator, denominator)
     print(f"Slant asymptote: y = {sAsymptote}")
     if input("see graph? (y/n) ") == "y":
         rangeX = (input("range of x values to render: ex. \"a, b\"\n")
