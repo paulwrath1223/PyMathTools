@@ -1,5 +1,6 @@
 
 # TODO: add method for automatically adding '*' between integers and quantities
+# more TODO below
 
 
 from sympy import *
