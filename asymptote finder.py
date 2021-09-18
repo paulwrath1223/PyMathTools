@@ -1,6 +1,4 @@
 
-
-
 from sympy import *
 from sympy.plotting import plot
 from sympy.solvers import solve
