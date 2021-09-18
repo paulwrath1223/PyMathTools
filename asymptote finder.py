@@ -1,4 +1,6 @@
 
+# TODO implement slant asymptote cases found here: https://courses.lumenlearning.com/ivytech-collegealgebra/chapter/identify-vertical-and-horizontal-asymptotes/
+
 from sympy import *
 from sympy.plotting import plot
 from sympy.solvers import solve
@@ -14,14 +16,15 @@ holeXY = []
 
 x, y = symbols("x y")  # declare x and y as mathematical symbols
 while True:
-    originalEq = input("enter equation with x.\ny = ").replace("^", "**")  # sympy uses '**' for powers
+    originalEq = input(
+        "enter equation with x.\ny = ").replace("^", "**")  # sympy uses '**' for powers, but I use '^'
 
     brokenExpr = originalEq.split("/")  # split the equation into a list containing the numerator and denominator
     numerator = sympify(brokenExpr[0])
-    denominator = sympify(brokenExpr[1])  # sympify converts strings to mathematical expressions
-    nIssues = solve(numerator, x)
+    denominator = sympify(brokenExpr[1])  # 'sympify' function converts strings to mathematical expressions
+    nIssues = solve(numerator, x)  # finds all values of x that make the numerator = 0
     dIssues = solve(denominator, x)  # finds all values of x that make the denominator = 0
-    for num in dIssues:  # loop through undefined x values
+    for num in dIssues:  # loop through undefined y values
         if num in nIssues:
             holes.append(num)  # if the x value also makes the numerator = 0, then it is a hole, not an asymptote
         else:
