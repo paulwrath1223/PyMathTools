@@ -1,6 +1,5 @@
 
-# TODO display holes as points, not x values (even though they have no y value) so that they can be added to the graph
-# TODO plot holes ^ with plot_implicit circles at the point found above
+
 
 from sympy import *
 from sympy.plotting import plot
@@ -13,8 +12,9 @@ init_printing(use_unicode=True)
 
 holes = []
 vAsymptotes = []
+holeXY = []
 
-x, y = symbols("x y")
+x, y = symbols("x y")  # declare x and y as mathematical symbols
 while True:
     originalEq = input("enter equation with x.\ny = ").replace("^", "**")
 
@@ -28,9 +28,17 @@ while True:
             holes.append(num)
         else:
             vAsymptotes.append(num)
-    holesFormatted = str(holes).replace("[", "").replace("]", "")
+
+    simpleIn = simplify(originalEq)
+    print(f"simpleIn: {simpleIn}")
+    for a in holes:
+        holeX = float(a)
+        holeY = float(simpleIn.subs(x, holeX))
+        holeXY.append((holeX, holeY))
+
+    holesFormatted = str(holeXY).replace("[", "").replace("]", "")
     vAsymptotesFormatted = str(vAsymptotes).replace("[", "").replace("]", "")
-    print(f"Holes: x = {holesFormatted}\nVertical Asymptotes: x = {vAsymptotesFormatted}")
+    print(f"Holes: {holesFormatted}\nVertical Asymptotes: x = {vAsymptotesFormatted}")
     fullNum = expand(numerator)
     fullDen = expand(denominator)
     firstTermNum = sympify(str(fullNum).split()[0])
@@ -46,18 +54,17 @@ while True:
         elif rangeX[0] == rangeX[1]:
             raise Exception("The range must be greater than 0")
         else:
-            rangeY = (input("range of y values to render: ex. \"a, b\"\n")).split(",")
-            if rangeY[0] > rangeY[1]:
-                temp = rangeY[0]
-                rangeY[0] = rangeY[1]
-                rangeY[1] = temp
-            elif rangeY[0] == rangeY[1]:
-                raise Exception("The range must be greater than 0")
-            else:
-                p1 = plot(sympify(originalEq), (x, rangeX[0], rangeX[1]), (y, rangeY[0], rangeY[1]), show=False)
-                for expr in vAsymptotes:
-                    p1.append(plot_implicit((Eq(x, expr)), (x, rangeX[0], rangeX[1]), (y, rangeY[0], rangeY[1]),
-                                            show=False, line_color="r")[0])
-                p1.append(plot(sympify(sAsymptote), (x, rangeX[0], rangeX[1]), (y, rangeY[0], rangeY[1]),
-                               show=False, line_color="g")[0])
-                p1.show()
+
+            p1 = plot(sympify(originalEq), (x, rangeX[0], rangeX[1]), show=False)
+            for expr in vAsymptotes:
+                p1.append(plot_implicit((Eq(x, expr)), (x, rangeX[0], rangeX[1]),
+                                        show=False, line_color="r")[0])
+            for h in holeXY:
+                hX = str(h[0])
+                hY = str(h[1])
+                ex = sympify("(x-"+hX+")**2+(y-"+hY+")**2")
+                p1.append(plot_implicit(Eq(ex, 0.04), (x, rangeX[0], rangeX[1]),
+                                        show=False, line_color="b")[0])
+            p1.append(plot(sympify(sAsymptote), (x, rangeX[0], rangeX[1]),
+                           show=False, line_color="g")[0])
+            p1.show()
