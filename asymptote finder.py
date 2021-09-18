@@ -3,7 +3,7 @@ from sympy import *
 from sympy.plotting import plot
 from sympy.solvers import solve
 
-# test eq: (x^2-1)/(x^2-2*x-3)     (3*x^2-2*x+1)/(x-1)
+# test eq: (x^2-1)/(x^2-2x-3)     (3x^2-2x+1)/(x-1)       (3x^5-x^2)/(x+3)
 
 holeRadius = 0.2  # constant representing the radius of the holes drawn on the plot
 
@@ -24,7 +24,7 @@ def multiplify(express):
             next_char = express_list[counter+1]
             if next_char == "x" or next_char == "(":
                 out += "*"
-    return sympify(out)
+    return out
     # sample: "2(x-1)" -> "2*(x-1)"
 
 
@@ -59,12 +59,12 @@ def get_slant(num, den):
 
 
 while True:
-    originalEq = input(
-        "enter equation with x.\ny = ").replace("^", "**")  # sympy uses '**' for powers, but I use '^'
+    originalEq = multiplify(input(
+        "enter equation with x.\ny = ").replace("^", "**"))  # sympy uses '**' for powers, but I use '^'
 
     brokenExpr = originalEq.split("/")  # split the equation into a list containing the numerator and denominator
-    numerator = multiplify(brokenExpr[0])
-    denominator = multiplify(brokenExpr[1])  # 'multiplify' function adds '*' where needed
+    numerator = sympify(brokenExpr[0])
+    denominator = sympify(brokenExpr[1])
     nIssues = solve(numerator, x)  # finds all values of x that make the numerator = 0
     dIssues = solve(denominator, x)  # finds all values of x that make the denominator = 0
     for numb in dIssues:  # loop through undefined y values
