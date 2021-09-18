@@ -1,8 +1,4 @@
 
-# TODO: add method for automatically adding '*' between integers and quantities
-# more TODO below
-
-
 from sympy import *
 from sympy.plotting import plot
 from sympy.solvers import solve
@@ -18,27 +14,31 @@ holeXY = []
 x, y = symbols("x y")  # declare x and y as mathematical symbols
 
 
+def multiplify(express):
+    # TODO
+    print("method for adding '*' signs into user typed expressions")
+    # sample: "2(x-1)" -> "2*(x-1)"
+
+
+def get_poly_degree(polynomial):
+    broken_first_term_poly = str(polynomial).split("**")  # returns the degree of the biggest term in the polynomial
+    if len(broken_first_term_poly) == 2:  # if '**' is present, the degree is what follows
+        poly_degree = int(broken_first_term_poly[1])
+    elif len(broken_first_term_poly) == 1:  # if the biggest term does not have an exponent, the degree is 1
+        poly_degree = 1
+    else:
+        raise Exception("internal problem within get_poly_degree for polynomial")
+    return poly_degree
+
+
 def get_slant(num, den):
     full_num = expand(num)
     full_den = expand(den)  # expand both numerator and denominator to unfactored form
     first_term_num = sympify(str(full_num).split()[0])  # find the first (biggest) term in each
     first_term_den = sympify(str(full_den).split()[0])
-    # TODO Fix code duplication for num and den below, consider new function
-    broken_first_term_num = str(first_term_num).split("**")  # returns the degree of the biggest term in the numerator
-    broken_first_term_den = str(first_term_den).split("**")  # returns the degree of the biggest term in the denominator
-    if len(broken_first_term_num) == 2:  # if '**' is present, the degree is what follows
-        num_degree = int(broken_first_term_num[1])
-    elif len(broken_first_term_num) == 1:  # if the biggest term does not have an exponent, the degree is 1
-        num_degree = 1
-    else:
-        raise Exception("internal problem within get_slant for numerator")
-    # same code for denominator
-    if len(broken_first_term_den) == 2:  # if '**' is present, the degree is what follows
-        den_degree = int(broken_first_term_den[1])
-    elif len(broken_first_term_den) == 1:  # if the biggest term does not have an exponent, the degree is 1
-        den_degree = 1
-    else:
-        raise Exception("internal problem within get_slant for denominator")
+
+    num_degree = get_poly_degree(first_term_num)  # returns the degree of the biggest term in the numerator
+    den_degree = get_poly_degree(first_term_den)  # returns the degree of the biggest term in the denominator
 
     if num_degree < den_degree:  # case 1 from \/
         # https://courses.lumenlearning.com/ivytech-collegealgebra/chapter/identify-vertical-and-horizontal-asymptotes/
