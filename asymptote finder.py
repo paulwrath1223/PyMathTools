@@ -3,7 +3,7 @@ from sympy import *
 from sympy.plotting import plot
 from sympy.solvers import solve
 
-# test eq: (x^2-1)/(x^2-2x-3)     (3x^2-2x+1)/(x-1)       (3x^5-x^2)/(x+3)
+# test eq: (x^2-1)/(x^2-2x-3)     (3x^2-2x+1)/(x-1)       (3x^5-x^2)/(x+3)     (3x^2+2)/(x^2+4x-5)
 
 holeRadius = 0.2  # constant representing the radius of the holes drawn on the plot
 
@@ -95,18 +95,21 @@ while True:
         elif rangeX[0] == rangeX[1]:
             raise Exception("The range must be greater than 0")  # raise error if the range = 0
         else:  # if the range provided is valid
-
-            p1 = plot(sympify(originalEq), (x, rangeX[0], rangeX[1]), show=False)  # add original equation to p1
+            yRange = (float(rangeX[0]), float(rangeX[1]))
+            p1 = plot(sympify(originalEq), (x, rangeX[0], rangeX[1]), ylim=yRange,
+                      show=False, aspect_ratio=(1.0, 1.0))  # add original equation to p1
             for expr in vAsymptotes:
                 p1.append(plot_implicit((Eq(x, expr)), (x, rangeX[0], rangeX[1]),  # add all vertical asymptotes
-                                        show=False, line_color="r")[0])
+                                        show=False, aspect_ratio=(1.0, 1.0), ylim=yRange, line_color="r")[0])
             for h in holeXY:
                 hX = h[0]
                 hY = h[1]
                 ex = sympify("(x-"+str(hX)+")**2+(y-"+str(hY)+")**2")
-                p1.append(plot_implicit(Eq(ex, holeRadius**2), (x, hX - holeRadius, hX + holeRadius), show=False,
-                                        line_color="b", adaptive=False, nb_of_points=400)[0])  # add circles for holes
+                p1.append(plot_implicit(Eq(ex, holeRadius**2), (x, hX - holeRadius, hX + holeRadius),
+                                        (y, hY - holeRadius, hY + holeRadius),
+                                        show=False, line_color="b", aspect_ratio=(1.0, 1.0), ylim=yRange,
+                                        adaptive=False, nb_of_points=400)[0])  # add circles for holes
 
-            p1.append(plot(sympify(sAsymptote), (x, rangeX[0], rangeX[1]),
-                           show=False, line_color="g")[0])  # add slant asymptote
+            p1.append(plot(sympify(sAsymptote), (x, rangeX[0], rangeX[1]), ylim=yRange,
+                           show=False, line_color="g", aspect_ratio=(1.0, 1.0))[0])  # add slant asymptote
             p1.show()  # render plot
