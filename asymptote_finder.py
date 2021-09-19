@@ -20,7 +20,7 @@ def multiplify(express):
     for counter in range(len(express_list)):
         char = express_list[counter]
         out += char
-        if char.isnumeric() or char == "x":
+        if char.isnumeric() or char == "x" or char == ")":
             next_char = express_list[counter+1]
             if next_char == "x" or next_char == "(":
                 out += "*"
