@@ -10,4 +10,5 @@ if rangeX[0] > rangeX[1]:
 elif rangeX[0] == rangeX[1]:
     raise Exception("The range must be greater than 0")
 else:
-    p1 = plot(expr, (x, rangeX[0], rangeX[1]))
+    yRange = (float(rangeX[0]), float(rangeX[1]))
+    p1 = plot(sympify(expr), (x, rangeX[0], rangeX[1]), ylim=yRange, aspect_ratio=(1.0, 1.0))
