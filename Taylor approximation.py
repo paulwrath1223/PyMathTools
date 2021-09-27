@@ -1,6 +1,6 @@
 from sympy import *
-from sympy.plotting import plot
-from sympy.solvers import solve
+# from sympy.plotting import plot
+# from sympy.solvers import solve
 
 
 def multiplify(express):  # adds '*' in between ")(", "
@@ -35,11 +35,10 @@ def diff(x_derivs_known, func_t, func_k, bool_simplify=False):
         result = x_derivs_known[i]
         while i < func_k:
             result = result.diff(func_t)
-            j = len(x_derivs_known)
-            x0 = None
-            while j > 1:
-                j -= 1
-                result = result.subs(Derivative(x_derivs_known[0], func_t, j), x_derivs_known[j])
+            func_j = len(x_derivs_known)
+            while func_j > 1:
+                func_j -= 1
+                result = result.subs(Derivative(x_derivs_known[0], func_t, func_j), x_derivs_known[func_j])
             i += 1
             if bool_simplify:
                 result = result.simplify()
