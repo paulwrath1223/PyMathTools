@@ -6,6 +6,7 @@ from sympy.solvers import solve
 # test eq: (x^2-1)/(x^2-2x-3)     (3x^2-2x+1)/(x-1)       (3x^5-x^2)/(x+3)
 #          (3x^2+2)/(x^2+4x-5)    (x+6)(x+7)(x-2)(x+3)/((x-1)(x+2)(x-5)(x+7)(x+6))
 #          ((x-1)(x+2)(x-5)(x+7)(x+6))/((x+6)(x+7)(x-2)(x+3))
+#          (4x^2-9)/(2x+3) DOES NOT GRAPH!!
 holeRadius = 0.1  # constant representing the radius of the holes drawn on the plot
 
 holes = []
@@ -88,8 +89,9 @@ print(f"Holes: {holesFormatted}\nVertical Asymptotes: x = {vAsymptotesFormatted}
 sAsymptote = get_slant(numerator, denominator)
 print(f"Slant asymptote: y = {sAsymptote}")
 if input("see graph? (y/n) ") == "y":
-    rangeX = (input("range of x values to render: ex. \"a, b\"\n")
-              ).split(",")  # returns list containing the bounds for X
+    # rangeX = (input("range of x values to render: ex. \"a, b\"\n")
+    #           ).split(",")  # returns list containing the bounds for X
+    rangeX = "-50,50".split(",")
     if rangeX[0] > rangeX[1]:  # if bounds are backwards, switch them
         temp = rangeX[0]
         rangeX[0] = rangeX[1]
@@ -97,6 +99,7 @@ if input("see graph? (y/n) ") == "y":
     elif rangeX[0] == rangeX[1]:
         raise Exception("The range must be greater than 0")  # raise error if the range = 0
     else:  # if the range provided is valid
+        print(f"sympify(originalEq): {sympify(originalEq)}")
         yRange = (float(rangeX[0]), float(rangeX[1]))
         p1 = plot(sympify(originalEq), (x, rangeX[0], rangeX[1]), ylim=yRange,
                   show=False, aspect_ratio=(1.0, 1.0))  # add original equation to p1
@@ -114,4 +117,5 @@ if input("see graph? (y/n) ") == "y":
 
         p1.append(plot(sympify(sAsymptote), (x, rangeX[0], rangeX[1]), ylim=yRange,
                        show=False, line_color="g", aspect_ratio=(1.0, 1.0))[0])  # add slant asymptote
+        # print(f"p1: {p1}")
         p1.show()  # render plot
