@@ -6,15 +6,15 @@ from sympy import *
 def multiplify(express):  # adds '*' in between ")(", "x(", "2x"
     express_list = list(str(express))
     out = ""
-    counter = 0
-    for counter in range(len(express_list)-1):
-        char = express_list[counter]
+    counter1 = 0
+    for counter1 in range(len(express_list)-1):
+        char = express_list[counter1]
         out += char
         if char.isnumeric() or char == "x" or char == ")":
-            next_char = express_list[counter+1]
+            next_char = express_list[counter1+1]
             if next_char == "x" or next_char == "(":
                 out += "*"
-    out += express_list[counter+1]
+    out += express_list[counter1+1]
     return out
     # sample: "2(x-1)" -> "2*(x-1)"
 
