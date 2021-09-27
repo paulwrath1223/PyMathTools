@@ -3,7 +3,7 @@ from sympy import *
 # from sympy.solvers import solve
 
 
-def multiplify(express):  # adds '*' in between ")(", "
+def multiplify(express):  # adds '*' in between ")(", "x(", "2x"
     express_list = list(str(express))
     out = ""
     counter = 0
@@ -19,35 +19,37 @@ def multiplify(express):  # adds '*' in between ")(", "
     # sample: "2(x-1)" -> "2*(x-1)"
 
 
-def diff(x_derivs_known, func_t, func_k, bool_simplify=False):
-    try:
-        func_n = len(x_derivs_known)
-    except TypeError:
-        func_n = None
-    if func_n is None:
-        result = diff(x_derivs_known, func_t, func_k)
-        if bool_simplify:
-            result = result.simplify()
-    elif func_k < func_n:
-        result = x_derivs_known[func_k]
-    else:
-        i = func_n - 1
-        result = x_derivs_known[i]
-        while i < func_k:
-            result = result.diff(func_t)
-            func_j = len(x_derivs_known)
-            while func_j > 1:
-                func_j -= 1
-                result = result.subs(Derivative(x_derivs_known[0], func_t, func_j), x_derivs_known[func_j])
-            i += 1
-            if bool_simplify:
-                result = result.simplify()
-    return result
-
-
-a, b, c, d, f, g, h, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = symbols(
-    "a b c d f g h j k l m n o p q r s t u v w x y z")  # declare a mathematical symbol for all letters except e and i
+a, b, c, d, f, g, h, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, z = symbols(
+    "a b c d f g h j k l m n o p q r s t u v w x z")  # declare a mathematical symbol for all letters except e and i
 
 originalEq = multiplify(input(
-        "enter equation with variables represented by lowercase letters. "))
+        "enter equation with variables represented by lowercase letters. \ny = "))
+originalEq = sympify(originalEq.replace("^", "**"))
 
+tempIn = input("what point should the series center about\n")
+targetX = float(tempIn)
+
+tempIn = input("How many terms in the series? (int)\n")
+try:
+    seriesDegree = int(tempIn)
+except:
+    raise Exception("number of terms must be a positive integer")
+if not (seriesDegree >= 1 and seriesDegree % 1 == 0):
+    raise Exception("number of terms must be a positive integer")
+else:
+    factors = [sympify("1")]
+    derivs = [originalEq]
+    numerators = [originalEq.subs(x, targetX)]
+    denominators = [1]
+    assembledTerm = [(numerators[0] / denominators[0]) * factors[0]]
+    completeSeries = assembledTerm[0]
+
+    for counter in range(1, seriesDegree):
+        lastFunc = derivs[counter-1]
+        derivs.append(diff(lastFunc, x))
+        numerators.append(simplify(derivs[counter].subs(x, targetX)))
+        denominators.append(denominators[counter-1]*counter)
+        factors.append(sympify("(x-"+str(targetX)+")**"+str(counter)))
+        assembledTerm.append((numerators[counter] / denominators[counter]) * factors[counter])
+        completeSeries += assembledTerm[counter]
+print(str(completeSeries).replace("**", "^"))
