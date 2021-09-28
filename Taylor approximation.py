@@ -49,7 +49,7 @@ else:
         derivs.append(diff(lastFunc, x))
         numerators.append(simplify(derivs[counter].subs(x, targetX)))
         denominators.append(denominators[counter-1]*counter)
-        factors.append(sympify("(x-"+str(targetX)+")**"+str(counter)))
+        factors.append(sympify((x-targetX)**counter))  # Make this not nasty pls
         assembledTerm.append((numerators[counter] / denominators[counter]) * factors[counter])
         completeSeries += assembledTerm[counter]
 print(str(completeSeries).replace("**", "^"))
