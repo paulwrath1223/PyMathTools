@@ -99,7 +99,7 @@ if input("see graph? (y/n) ") == "y":
     elif rangeX[0] == rangeX[1]:
         raise Exception("The range must be greater than 0")  # raise error if the range = 0
     else:  # if the range provided is valid
-        print(f"sympify(originalEq): {sympify(originalEq)}")
+        print(f"originalEq: {sympify(originalEq)}")
         yRange = (float(rangeX[0]), float(rangeX[1]))
         p1 = plot(sympify(originalEq), (x, rangeX[0], rangeX[1]), ylim=yRange,
                   show=False, aspect_ratio=(1.0, 1.0))  # add original equation to p1
