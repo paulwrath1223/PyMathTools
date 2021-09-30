@@ -3,6 +3,7 @@ from sympy import *
 # from sympy.solvers import solve
 
 # Check "Series Expansion" on sympy doc to do this better
+debug = False  # CONSTANT for printing var values
 
 
 def multiplify(express):  # adds '*' in between ")(", "x(", "2x"
@@ -19,6 +20,11 @@ def multiplify(express):  # adds '*' in between ")(", "x(", "2x"
     out += express_list[counter1+1]
     return out
     # sample: "2(x-1)" -> "2*(x-1)"
+
+
+def big_o_adios(expr_in):
+    temp = str(expr_in.split("O")[0])
+    return temp[0:len(temp)-2]
 
 
 def print_list(zlist, name="list"):
@@ -63,11 +69,14 @@ else:
         completeSeries += assembledTerm[counter]
 finalOut = str(completeSeries).replace("**", "^")
 print(f"finalOut: {finalOut}")
-altOut = series(originalEq, x, targetX, seriesDegree)
-print(f"altOut: {altOut}")
 
-print_list(derivs, "derivs")
-print_list(numerators, "numerators")
-print_list(denominators, "denominators")
-print_list(factors, "factors")
-print_list(assembledTerm, "assembledTerm")
+altOut = big_o_adios(str(series(originalEq, x, targetX, seriesDegree)).replace("**", "^"))
+# ^ perfect code
+
+print(f"altOut: {altOut}")
+if debug:
+    print_list(derivs, "derivs")
+    print_list(numerators, "numerators")
+    print_list(denominators, "denominators")
+    print_list(factors, "factors")
+    print_list(assembledTerm, "assembledTerm")
