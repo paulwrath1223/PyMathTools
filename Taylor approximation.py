@@ -2,6 +2,8 @@ from sympy import *
 # from sympy.plotting import plot
 # from sympy.solvers import solve
 
+# Check "Series Expansion" on sympy doc to do this better
+
 
 def multiplify(express):  # adds '*' in between ")(", "x(", "2x"
     express_list = list(str(express))
@@ -19,6 +21,13 @@ def multiplify(express):  # adds '*' in between ")(", "x(", "2x"
     # sample: "2(x-1)" -> "2*(x-1)"
 
 
+def print_list(zlist, name="list"):
+    print(f"\n<{name}>\n")
+    for item in zlist:
+        print(item)
+    print(f"\n</{name}>\n")
+
+
 a, b, c, d, f, g, h, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, z = symbols(
     "a b c d f g h j k l m n o p q r s t u v w x z")  # declare a mathematical symbol for all letters except e and i
 
@@ -27,7 +36,7 @@ originalEq = multiplify(input(
 originalEq = sympify(originalEq.replace("^", "**"))
 
 tempIn = input("what point should the series center about\n")
-targetX = float(tempIn)
+targetX = sympify(tempIn)
 
 tempIn = input("How many terms in the series? (int)\n")
 try:
@@ -46,10 +55,19 @@ else:
 
     for counter in range(1, seriesDegree):
         lastFunc = derivs[counter-1]
-        derivs.append(diff(lastFunc, x))
+        derivs.append(simplify(diff(lastFunc, x)))
         numerators.append(simplify(derivs[counter].subs(x, targetX)))
         denominators.append(denominators[counter-1]*counter)
         factors.append(sympify((x-targetX)**counter))  # Make this not nasty pls
-        assembledTerm.append((numerators[counter] / denominators[counter]) * factors[counter])
+        assembledTerm.append(simplify((numerators[counter] / denominators[counter]) * factors[counter]))
         completeSeries += assembledTerm[counter]
-print(str(completeSeries).replace("**", "^"))
+finalOut = str(completeSeries).replace("**", "^")
+print(f"finalOut: {finalOut}")
+altOut = series(originalEq, x, targetX, seriesDegree)
+print(f"altOut: {altOut}")
+
+print_list(derivs, "derivs")
+print_list(numerators, "numerators")
+print_list(denominators, "denominators")
+print_list(factors, "factors")
+print_list(assembledTerm, "assembledTerm")
