@@ -4,6 +4,8 @@ from sympy.solvers import solve
 init_printing(use_unicode=True)  # Don't even know what this does
 
 
+
+
 a, b, c, d, f, g, h, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z = symbols(
     "a b c d f g h j k l m n o p q r s t u v w x y z")  # declare a mathematical symbol for all letters except e and i
 
