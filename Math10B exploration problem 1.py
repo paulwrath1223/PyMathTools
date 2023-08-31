@@ -29,7 +29,6 @@ def get_distances_abs(num_sections, radius):
     """
     target = math.pi / num_sections  # the target area of each region.
     for i in range(1, num_sections):  # for each cut
-        # TODO: stop at halfway, then mirror
         answer = numerical_solve(
             area_from_minus_one_to_f,
             # function that returns the area under a circle from x = -1 to x = f, where f is the function argument
@@ -39,6 +38,33 @@ def get_distances_abs(num_sections, radius):
             10)  # the maximum number of iterations of the 'iterate_numerical_solve_get_new_guess' function
         # because answer is for a circle of radius 1, multiply it by the actual radius to get the real cut position.
         print(f"cut {i} at x = {round(answer * radius, precision)}")
+
+
+def optimized_get_distances_abs(num_sections, radius):
+    """
+    print location of cuts that split a circle 'c' into 'n' regions of equal area
+    :param num_sections: the number of regions 'n' that the circle 'c' should be split into
+    :param radius: the radius of the circle 'c'
+    """
+    cuts = []
+    target = math.pi / num_sections  # the target area of each region.
+    for i in range(1, int((num_sections + 1) / 2)):  # for each cut
+        answer = numerical_solve(
+            area_from_minus_one_to_f,
+            # function that returns the area under a circle from x = -1 to x = f, where f is the function argument
+            (target * i),  # the target area between x = -1 and the position of cut i
+            semi_circle,  # the derivative of the 'area_from_minus_one_to_f' function
+            0,  # a reasonable guess for the position of the cut i. It must be between -1 and 1 inclusive
+            10)  # the maximum number of iterations of the 'iterate_numerical_solve_get_new_guess' function
+        # because answer is for a circle of radius 1, multiply it by the actual radius to get the real cut position.
+        temp_answer = round(answer * radius, precision)
+        cuts.append(temp_answer)
+    num_cuts = len(cuts)
+    if num_sections % 2 == 0:
+        cuts.append(0.0)
+    for j in range(num_cuts - 1, -1, -1):
+        cuts.append(-cuts[j])
+    return cuts
 
 
 def numerical_solve(expression_function, target, ddx_expression_function, initial_guess, iterations):
@@ -84,4 +110,9 @@ def iterate_numerical_solve_get_new_guess(expression_function, target, ddx_expre
     return guess + guess_delta_x  # apply this change in guess x to the previous guess to get a new value
 
 
-get_distances_abs(100, 10)
+temp_sections = 4
+temp_radius = 7
+get_distances_abs(temp_sections, temp_radius)
+temp_cuts = optimized_get_distances_abs(temp_sections, temp_radius)
+for cut in temp_cuts:
+    print(cut)
