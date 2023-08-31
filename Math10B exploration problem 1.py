@@ -21,25 +21,6 @@ def semi_circle(p):
     return 2 * (math.sqrt(1 - (p ** 2)))
 
 
-def get_distances_abs(num_sections, radius):
-    """
-    print location of cuts that split a circle 'c' into 'n' regions of equal area
-    :param num_sections: the number of regions 'n' that the circle 'c' should be split into
-    :param radius: the radius of the circle 'c'
-    """
-    target = math.pi / num_sections  # the target area of each region.
-    for i in range(1, num_sections):  # for each cut
-        answer = numerical_solve(
-            area_from_minus_one_to_f,
-            # function that returns the area under a circle from x = -1 to x = f, where f is the function argument
-            (target * i),  # the target area between x = -1 and the position of cut i
-            semi_circle,  # the derivative of the 'area_from_minus_one_to_f' function
-            0,  # a reasonable guess for the position of the cut i. It must be between -1 and 1 inclusive
-            10)  # the maximum number of iterations of the 'iterate_numerical_solve_get_new_guess' function
-        # because answer is for a circle of radius 1, multiply it by the actual radius to get the real cut position.
-        print(f"cut {i} at x = {round(answer * radius, precision)}")
-
-
 def optimized_get_distances_abs(num_sections, radius):
     """
     print location of cuts that split a circle 'c' into 'n' regions of equal area
@@ -112,7 +93,7 @@ def iterate_numerical_solve_get_new_guess(expression_function, target, ddx_expre
 
 temp_sections = 4
 temp_radius = 7
-get_distances_abs(temp_sections, temp_radius)
+
 temp_cuts = optimized_get_distances_abs(temp_sections, temp_radius)
 for cut in temp_cuts:
     print(cut)
