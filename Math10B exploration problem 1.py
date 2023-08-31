@@ -29,6 +29,7 @@ def get_distances_abs(num_sections, radius):
     """
     target = math.pi / num_sections  # the target area of each region.
     for i in range(1, num_sections):  # for each cut
+        # TODO: stop at halfway, then mirror
         answer = numerical_solve(
             area_from_minus_one_to_f,
             # function that returns the area under a circle from x = -1 to x = f, where f is the function argument
