@@ -95,5 +95,6 @@ temp_sections = 4
 temp_radius = 7
 
 temp_cuts = optimized_get_distances_abs(temp_sections, temp_radius)
+
 for cut in temp_cuts:
     print(cut)
