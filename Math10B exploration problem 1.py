@@ -48,7 +48,7 @@ def optimized_get_distances_abs(num_sections, radius):
     """
     cuts = []
     target = math.pi / num_sections  # the target area of each region.
-    for i in range(1, int((num_sections + 1) / 2)):  # for each cut
+    for i in range(1, int((num_sections + 1) / 2)):  # for the first half of cuts
         answer = numerical_solve(
             area_from_minus_one_to_f,
             # function that returns the area under a circle from x = -1 to x = f, where f is the function argument
@@ -61,8 +61,8 @@ def optimized_get_distances_abs(num_sections, radius):
         cuts.append(temp_answer)
     num_cuts = len(cuts)
     if num_sections % 2 == 0:
-        cuts.append(0.0)
-    for j in range(num_cuts - 1, -1, -1):
+        cuts.append(0.0)  # if the number of sections is even, there must be a cut in the middle
+    for j in range(num_cuts - 1, -1, -1):  # mirror the list of cuts
         cuts.append(-cuts[j])
     return cuts
 
