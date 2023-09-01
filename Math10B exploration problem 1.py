@@ -1,6 +1,8 @@
 import math
 
 precision = 12  # sets the number of decimal places in the cut positions
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 def integral_of_circle(f: float) -> float:
@@ -87,10 +89,42 @@ def numerical_solve(expression_function,
     return current_guess  # return the latest guess after all iterations have been executed
 
 
-sections = 9
-radius = 7
+def visualizer(cut_list: list, display_radius: float, num_sections: int):
+    color_list = ["red", "blue", "green"]
+    if not len(cut_list) == num_sections - 1:
+        return
+    # make data
+    figure, axes = plt.subplots()
+    axes.set_aspect(1)
+    circle = plt.Circle((0, 0), display_radius, fill=False)
 
-all_cuts = optimized_get_distances_abs(sections, radius)
+    axes.add_artist(circle)
 
-for cut in all_cuts:
-    print(f"cut at x = {cut}")
+    plt.ylim(-display_radius * 1.1, display_radius * 2)
+    plt.xlim(-display_radius * 1.1, display_radius * 1.1)
+    for i in range(num_sections - 1):
+        current_color = color_list[i % 3]
+        cut_x = cut_list[i]
+        annotation_text = f"Cut {i + 1} at x ~ {round(cut_x, 2)}"
+        plt.annotate(annotation_text, xy=(cut_x - display_radius * 0.15, display_radius * 1.1),
+                     ha="left", va="bottom", rotation=90, color=current_color, size="small")
+        plt.axvline(x=cut_x, color=current_color)
+
+    axes.set(title=f"Math1B exploration problem 1\nradius = {display_radius}, sections = {num_sections}")
+    axes.grid()
+    plt.savefig(f"math_exploration_1_saved_graphs/radius {display_radius} sections {num_sections}", dpi=500)
+    plt.close()
+
+
+sections = 10
+radius = 10
+for number_of_sections in range(2, sections + 1):
+    for current_radius in range(1, radius + 1):
+        all_cuts = optimized_get_distances_abs(number_of_sections, current_radius)
+        print(f"sections: {number_of_sections}, radius: {current_radius}")
+
+        # for cut in all_cuts:
+        #     print(f"cut at x = {cut}")
+
+        visualizer(all_cuts, current_radius, number_of_sections)
+
