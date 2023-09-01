@@ -88,39 +88,6 @@ def numerical_solve(expression_function,
     return current_guess  # return the latest guess after all iterations have been executed
 
 
-def visualizer(cut_list: list, display_radius: float):
-    """
-    saves a matplotlib graph with a visualization of the answer
-    Not relevant to finding the actual answer, just displays it.
-    :param cut_list: the list of x values for the cuts to place.
-    :param display_radius: the radius of the circle
-    :return: nothing
-    """
-    color_list = ["red", "blue", "green"]
-
-    figure, axes = plt.subplots()
-    axes.set_aspect(1)
-
-    circle = plt.Circle((0, 0), display_radius, fill=False)
-    axes.add_artist(circle)
-
-    plt.ylim(-display_radius * 1.1, display_radius * 2)
-    plt.xlim(-display_radius * 1.1, display_radius * 1.1)
-
-    for i in range(len(cut_list)):
-        current_color = color_list[i % 3]
-        cut_x = cut_list[i]
-        annotation_text = f"Cut {i + 1} at x ~ {round(cut_x, 2)}"
-        plt.annotate(annotation_text, xy=(cut_x - display_radius * 0.15, display_radius * 1.1),
-                     ha="left", va="bottom", rotation=90, color=current_color, size="small")
-        plt.axvline(x=cut_x, color=current_color)
-
-    axes.set(title=f"Math1B exploration problem 1\nradius = {display_radius}, sections = {len(cut_list) + 1}")
-    axes.grid()
-    plt.savefig(f"math_exploration_1_saved_graphs/radius {display_radius} sections {len(cut_list) + 1}", dpi=500)
-    plt.close()
-
-
 sections = 10
 radius = 10
 
@@ -128,4 +95,4 @@ all_cuts = optimized_get_distances_abs(sections, radius)
 for cut in all_cuts:
     print(f"cut at x = {cut}")
 
-visualizer(all_cuts, radius)
+
